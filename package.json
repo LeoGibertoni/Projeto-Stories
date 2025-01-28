@@ -1,0 +1,12 @@
+{
+  "name": "challeng",
+  "version": "1.0.0",
+  "description": "https://roadmap.sh/projects/stories-feature",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "npx tailwindcss -i ./src/input.css -o ./src/output.css --watch"
+  },
+  "author": "",
+  "license": "ISC"
+}

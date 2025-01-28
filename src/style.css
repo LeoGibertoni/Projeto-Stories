@@ -1,0 +1,16 @@
+.toast-animate{
+    animation-name: toast;
+    animation-duration: 2s;
+    /* repeate the animation */
+    animation-iteration-count: infinite;
+}
+
+@keyframes toast {
+    0% {
+        width: 100%;
+    }
+    100%{
+        width: 0%;
+    }
+
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./src/output.css">
+    <link rel="stylesheet" href="./src/style.css">
+    <title>Document</title>
+</head>
+
+<body class="mx-auto p-10 overflow-hidden">
+
+    <nav id="storyNav" class="flex p-4 flex-row gap-x-3 border-2 border-black items-center overflow-x-scroll">
+        <div id="showForm"
+            class="w-14 h-14 rounded-full border border-gray-600 grid place-content-center cursor-pointer">+</div>
+        <div id="storyList" class="h-full w-full flex gap-x-3 overflow-x-scroll"></div>
+    </nav>
+
+    <div id="storyForm" style="display: none"
+        class="absolute  place-content-center  shadow  top-1/2 left-1/2 -translate-x-[50%] -translate-y-[50%] p-5 border border-black rounded h-1/2 w-1/2">
+        <button id="closeForm"
+            class="absolute top-1 right-1 p-2 w-10 h-10 text-white bg-red-400 rounded-full aspect-square">X</button>
+        <input id="inputImg" type="file" class="outline-none focus:outline-none border-green-500 border rounded" name="">
+        <!-- the image -->
+        <div id="imageDiv" class="rounded w-32 h-32"></div>
+        <button id="storyAdd" type="button" class="p-3 rounded bg-green-500 text-center text-white">ADD STORY</button>
+    </div>
+    
+    <!-- Expanded Image Modal -->
+    <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.8); justify-content: center; align-items: center; z-index: 9999;">
+        <div id="modalContent" style="position: relative;">
+            <img id="modalImage" src="" alt="" style="max-width: 100%; max-height: 80vh; border-radius: 10px;">
+            <button id="closeModal" style="position: absolute; top: 10px; right: 10px; background-color: red; color: white; padding: 10px; border-radius: 50%;">X</button>
+            <button id="deleteImage" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background-color: red; color: white; padding: 10px 20px; border-radius: 5px;">Delete</button>
+        </div>
+    </div>
+
+    <img src="" alt="">
+
+    <!-- toast -->
+    <div id="toast"
+        class="absolute toast-animation text-white top-10 -right-72 duration-300 rounded p-5 max-w-64 min-w-64 bg-red-500">
+        <div id="toastAnime" class="absolute bottom-0 left-0 w-full h-2 bg-red-200"></div>
+    </div>
+    <!-- js -->
+    <script src="./main.js"></script>
+</body>
+
+</html>
