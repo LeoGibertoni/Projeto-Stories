@@ -13,9 +13,12 @@ const modalImage = document.getElementById('modalImage');
 const closeModal = document.getElementById('closeModal');
 const deleteImage = document.getElementById('deleteImage');
 const storyCounter = document.getElementById('storyCounter'); // Criar <p id="storyCounter"></p> no HTML
-
+const inputImage = document.getElementById("inputImage");
+const progressBar = document.getElementById("progressBar");
+const progressBarContainer = document.getElementById("progressBarContainer");
 let imageSlideshowInterval;
 let imagesArray = [];
+let imageIndex = 0;
 
 showForm.addEventListener('click', () => {
     storyForm.style.display = (storyForm.style.display === 'none' || storyForm.style.display === '') ? 'grid' : 'none';
@@ -47,7 +50,9 @@ function loadStories() {
             imageIndex = i;
             modalImage.src = imagesArray[imageIndex];
             imageModal.style.display = 'flex';
+            progressBarContainer.style.display = 'block'; // Exibe a barra de progresso quando a imagem for aberta
             updateStoryCounter(); // Atualiza o contador
+            updateProgressBar();
             startImageSlideshow();
         });
 
@@ -65,6 +70,7 @@ function startImageSlideshow() {
         imageIndex = (imageIndex + 1) % imagesArray.length;
         modalImage.src = imagesArray[imageIndex];
         updateStoryCounter(); // Atualiza o contador quando troca de imagem
+        updateProgressBar(); // Atualiza a barra de progresso
     }, 3000);
 }
 
@@ -78,6 +84,10 @@ function updateStoryCounter() {
     }
 }
 
+function updateProgressBar() {
+    const progress = ((imageIndex + 1) / imagesArray.length) * 100;
+    progressBar.style.width = `${progress}%`;
+}
 
 inputImg.addEventListener('change', function () {
     const file = inputImg.files[0];
@@ -109,6 +119,7 @@ closeForm.addEventListener('click', () => {
 
 closeModal.addEventListener('click', () => {
     imageModal.style.display = 'none';
+    progressBarContainer.style.display = 'none'; // Esconde a barra de progresso
     clearInterval(imageSlideshowInterval);
 });
 
@@ -127,13 +138,13 @@ deleteImage.addEventListener('click', () => {
 
     if (keyToRemove) {
         localStorage.removeItem(keyToRemove);
-        loadStories(); // Atualiza a exibição
+        // Recarrega as imagens com o índice correto
+        loadStories();
         imageModal.style.display = 'none';
         clearInterval(imageSlideshowInterval);
+        progressBarContainer.style.display = 'none'; // Esconde a barra de progresso
     }
 });
 
 // Carrega os stories na inicialização
 loadStories();
-
-

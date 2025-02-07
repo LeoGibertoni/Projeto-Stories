@@ -28,7 +28,12 @@
     </div>
     
     <!-- Expanded Image Modal -->
-    <div id="imageModal" class="imagefull">
+    <div id="progressBarContainer" style="display: none; position: fixed; top: 90%; left: 50%; transform: translateX(-50%); width: 80%; max-width: 600px;">
+        <div style="height: 20px; background-color: #e0e0e0; border-radius: 10px;">
+            <div id="progressBar" style="width: 0%; height: 100%; background-color: #000000; border-radius: 10px;"></div>
+        </div>
+    </div>
+    <div id="imageModal" class="imagefull" style="display: none;">
         <div id="modalContent" style="position: relative;" class="imageful">
             <img id="modalImage" src="" alt="" style="max-width: 100%; max-height: 80vh; border-radius: 10px;" class="imagem">
             <button id="closeModal" style="position: absolute; top: 10px; right: 10px; background-color: rgb(0, 0, 0); color: white; padding: 10px; border-radius: 50%; margin: 10px;">X</button>
