@@ -12,49 +12,72 @@ const imageModal = document.getElementById('imageModal');
 const modalImage = document.getElementById('modalImage');
 const closeModal = document.getElementById('closeModal');
 const deleteImage = document.getElementById('deleteImage');
+const storyCounter = document.getElementById('storyCounter'); // Criar <p id="storyCounter"></p> no HTML
 
-let imageIndex = 0;
 let imageSlideshowInterval;
 let imagesArray = [];
 
-showForm.addEventListener('click', function () {
+showForm.addEventListener('click', () => {
     storyForm.style.display = (storyForm.style.display === 'none' || storyForm.style.display === '') ? 'grid' : 'none';
 });
 
-if (localStorage.length > 0) {
+function loadStories() {
+    storyList.innerHTML = ''; // Evita duplicação
+    imagesArray = [];
+
     for (let i = 0; i < localStorage.length; i++) {
         const imageUrl = localStorage.getItem(`imageUrl${i}`);
         if (imageUrl) {
             imagesArray.push(imageUrl);
-            
-            const newStory = document.createElement('div');
-            newStory.className = 'w-14 h-14 overflow-hidden rounded-full border border-gray-600 grid place-content-center cursor-pointer';
-            const newImage = document.createElement('img');
-            newImage.src = imageUrl;
-            newImage.className = 'w-full h-full object-cover rounded-full';
-            
-            newStory.appendChild(newImage);
-            newStory.id = `newStory${i}`;
-            
-            newStory.addEventListener('click', function () {
-                imageIndex = imagesArray.indexOf(imageUrl);
-                modalImage.src = imageUrl;
-                imageModal.style.display = 'flex';
-                startImageSlideshow();
-            });
-            
-            storyList.appendChild(newStory);
         }
     }
+
+    imagesArray.forEach((imageUrl, i) => {
+        const newStory = document.createElement('div');
+        newStory.className = 'w-14 h-14 overflow-hidden rounded-full border border-gray-600 grid place-content-center cursor-pointer';
+
+        const newImage = document.createElement('img');
+        newImage.src = imageUrl;
+        newImage.className = 'w-full h-full object-cover rounded-full';
+
+        newStory.appendChild(newImage);
+        newStory.id = `newStory${i}`;
+
+        newStory.addEventListener('click', () => {
+            imageIndex = i;
+            modalImage.src = imagesArray[imageIndex];
+            imageModal.style.display = 'flex';
+            updateStoryCounter(); // Atualiza o contador
+            startImageSlideshow();
+        });
+
+        storyList.appendChild(newStory);
+    });
+
+    updateStoryCounter(); // Atualiza o contador quando a página carrega
 }
 
 function startImageSlideshow() {
     clearInterval(imageSlideshowInterval);
+    if (imagesArray.length === 0) return;
+
     imageSlideshowInterval = setInterval(() => {
         imageIndex = (imageIndex + 1) % imagesArray.length;
         modalImage.src = imagesArray[imageIndex];
+        updateStoryCounter(); // Atualiza o contador quando troca de imagem
     }, 3000);
 }
+
+function updateStoryCounter() {
+    if (storyCounter) {
+        if (imagesArray.length > 0 && imageIndex >= 0) {
+            storyCounter.innerText = `${imageIndex + 1}/${imagesArray.length}`;
+        } else {
+            storyCounter.innerText = '0/0';
+        }
+    }
+}
+
 
 inputImg.addEventListener('change', function () {
     const file = inputImg.files[0];
@@ -66,12 +89,13 @@ inputImg.addEventListener('change', function () {
             img.src = event.target.result;
             img.className = 'w-full h-full object-cover rounded-full';
             imageDiv.appendChild(img);
-            
-            storyAdd.addEventListener('click', function () {
-                const newIndex = storyList.children.length;
+
+            storyAdd.onclick = function () {
+                const newIndex = imagesArray.length;
                 localStorage.setItem(`imageUrl${newIndex}`, event.target.result);
-                window.location.reload();
-            });
+                loadStories(); // Atualiza sem recarregar a página
+                storyForm.style.display = 'none';
+            };
         };
         reader.readAsDataURL(file);
     } else {
@@ -79,21 +103,37 @@ inputImg.addEventListener('change', function () {
     }
 });
 
-closeForm.addEventListener('click', function () {
+closeForm.addEventListener('click', () => {
     storyForm.style.display = 'none';
 });
 
-closeModal.addEventListener('click', function () {
+closeModal.addEventListener('click', () => {
     imageModal.style.display = 'none';
     clearInterval(imageSlideshowInterval);
 });
 
-deleteImage.addEventListener('click', function () {
+deleteImage.addEventListener('click', () => {
+    if (imagesArray.length === 0) return;
+
     const imageUrl = modalImage.src;
+    let keyToRemove = null;
+
     for (let i = 0; i < localStorage.length; i++) {
         if (localStorage.getItem(`imageUrl${i}`) === imageUrl) {
-            localStorage.removeItem(`imageUrl${i}`);
-            window.location.reload();
+            keyToRemove = `imageUrl${i}`;
+            break;
         }
     }
+
+    if (keyToRemove) {
+        localStorage.removeItem(keyToRemove);
+        loadStories(); // Atualiza a exibição
+        imageModal.style.display = 'none';
+        clearInterval(imageSlideshowInterval);
+    }
 });
+
+// Carrega os stories na inicialização
+loadStories();
+
+
